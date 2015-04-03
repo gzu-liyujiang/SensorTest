@@ -20,6 +20,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * 主界面
+ *
  * @author 李玉江[QQ:1023694760]
  * @version 2015/4/3
  *          Created by IntelliJ IDEA 14.1

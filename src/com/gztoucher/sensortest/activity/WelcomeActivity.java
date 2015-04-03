@@ -7,6 +7,8 @@ import android.content.Intent;
 import com.gztoucher.sensortest.R;
 
 /**
+ * ª∂”≠“≥
+ *
  * @author ¿Ó”ÒΩ≠[QQ:1023694760]
  * @version 2015/4/3
  *          Created by IntelliJ IDEA 14.1
