@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1.0"
+                  android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:gravity="center"
+                android:text="加速度传感器"
+                android:textColor="#0066CC"
+                android:textSize="20sp"/>
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp">
+
+            <TextView
+                    android:id="@+id/main_txtAccelerometerX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+            <TextView
+                    android:id="@+id/main_txtAccelerometerY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/main_txtAccelerometerX"
+                    android:text="y"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+            <TextView
+                    android:id="@+id/main_txtAccelerometerZ"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/main_txtAccelerometerY"
+                    android:text="z"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:gravity="center"
+                android:text="方向传感器"
+                android:textColor="#0066CC"
+                android:textSize="20sp"/>
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp">
+
+            <TextView
+                    android:id="@+id/main_txtOrientationA"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="a"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+            <TextView
+                    android:id="@+id/main_txtOrientationB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/main_txtOrientationA"
+                    android:text="b"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+            <TextView
+                    android:id="@+id/main_txtOrientationC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/main_txtOrientationB"
+                    android:text="c"
+                    android:textColor="#0066CC"
+                    android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始收集数据"
+            android:textColor="#0066CC"
+            android:textSize="18sp"
+            android:onClick="startCollectData"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止收集数据"
+            android:textColor="#0066CC"
+            android:textSize="18sp"
+            android:onClick="stopCollectData"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="清空数据"
+            android:textColor="#0066CC"
+            android:textSize="18sp"
+            android:onClick="clearData"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="导出数据到Excel"
+            android:textColor="#0066CC"
+            android:textSize="18sp"
+            android:onClick="exportExcel"/>
+
+</LinearLayout>
