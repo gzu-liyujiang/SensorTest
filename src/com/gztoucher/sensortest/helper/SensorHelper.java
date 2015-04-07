@@ -47,13 +47,13 @@ public class SensorHelper implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         float[] values = event.values;
         if (null != sensorChangeListener) {
-            sensorChangeListener.onSensorChanged(event.sensor, values, event.timestamp);
+            sensorChangeListener.onSensorChanged(event.sensor, values);
         }
     }
 
     public interface OnSensorChangeListener {
 
-        void onSensorChanged(Sensor sensor, float[] values, long timestamp);
+        void onSensorChanged(Sensor sensor, float[] values);
 
     }
 

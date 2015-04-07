@@ -53,10 +53,10 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
     }
 
     @Override
-    public void onSensorChanged(Sensor sensor, float[] values, long timestamp) {
+    public void onSensorChanged(Sensor sensor, float[] values) {
         int sensorType = sensor.getType();
         showDataToView(sensorType, values);
-        saveDataToDb(sensorType, values, timestamp);
+        saveDataToDb(sensorType, values);
     }
 
     private void showDataToView(int sensorType, float[] values) {
@@ -116,10 +116,11 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
         orientationC.setText("手机左侧或右侧翘起的角度：" + leftRightString);
     }
 
-    private void saveDataToDb(final int sensorType, float[] values, final long timestamp) {
+    private void saveDataToDb(final int sensorType, float[] values) {
         final float x = values[0];
         final float y = values[1];
         final float z = values[2];
+        final long timeline = System.currentTimeMillis();
         Thread thread = new Thread() {
             //java.lang.OutOfMemoryError: pthread_create (stack size 16384 bytes) failed: Try again
             //通过线程池及时间频繁度来减少OOM的发生
@@ -132,7 +133,7 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
                 DbHelper dbHelper = DbHelper.getInstance(getBaseContext());
                 SQLiteDatabase database = dbHelper.getWritableDatabase();
                 database.execSQL("INSERT INTO sensor_test (type,x,y,z,timeline) VALUES (?,?,?,?,?)",
-                        new Object[]{sensorType, x, y, z, timestamp});
+                        new Object[]{sensorType, x, y, z, timeline});
             }
         };
         executorService.submit(thread);
