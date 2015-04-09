@@ -35,7 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + "x FLOAT NOT NULL,"
                 + "y FLOAT NOT NULL,"
                 + "z FLOAT NOT NULL,"
-                + "timeline DATE NOT NULL)";
+                + "timeline INTEGER NOT NULL)";
 
         db.execSQL(create_sql);
     }

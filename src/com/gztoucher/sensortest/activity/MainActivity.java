@@ -40,9 +40,7 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
         setContentView(R.layout.activity_main);
         wakeLocker = new WakeLocker(this, WakeLocker.Type.KEEP_CPU_RUN);
         accelerometerHelper = new SensorHelper(this, Sensor.TYPE_ACCELEROMETER);
-        accelerometerHelper.setOnSensorChangeListener(this);
         orientationHelper = new SensorHelper(this, Sensor.TYPE_ORIENTATION);
-        orientationHelper.setOnSensorChangeListener(this);
         accelerometerX = (TextView) findViewById(R.id.main_txtAccelerometerX);
         accelerometerY = (TextView) findViewById(R.id.main_txtAccelerometerY);
         accelerometerZ = (TextView) findViewById(R.id.main_txtAccelerometerZ);
@@ -220,8 +218,8 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
 
     public void startCollectData(View view) {
         //开始监听传感器
-        accelerometerHelper.registerListener();
-        orientationHelper.registerListener();
+        accelerometerHelper.registerListener(this);
+        orientationHelper.registerListener(this);
     }
 
     public void stopCollectData(View view) {

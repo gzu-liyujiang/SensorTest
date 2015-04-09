@@ -24,11 +24,8 @@ public class SensorHelper implements SensorEventListener {
         this.sensorType = sensorType;
     }
 
-    public void setOnSensorChangeListener(OnSensorChangeListener listener) {
-        this.sensorChangeListener = listener;
-    }
-
-    public void registerListener() {
+    public void registerListener(OnSensorChangeListener listener) {
+        sensorChangeListener = listener;
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(sensorType),
                 SensorManager.SENSOR_DELAY_NORMAL);
