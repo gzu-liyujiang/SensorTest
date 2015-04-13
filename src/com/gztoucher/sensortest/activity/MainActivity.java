@@ -26,8 +26,9 @@ import java.util.concurrent.Executors;
  * @version 2015/4/3
  *          Created by IntelliJ IDEA 14.1
  */
-public class MainActivity extends Activity implements SensorHelper.OnSensorChangeListener {
+public class MainActivity extends Activity implements SensorHelper.OnSensorChangeListener, ScreenListener.ScreenStateListener {
     private WakeLocker wakeLocker;
+    private ScreenListener screenListener;
     private SensorHelper accelerometerHelper;
     private SensorHelper orientationHelper;
     private TextView accelerometerX, accelerometerY, accelerometerZ;
@@ -38,7 +39,10 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
         super.onCreate(savedInstanceState);
         WakeLocker.keepScreenBright(this);//保持屏幕长亮
         setContentView(R.layout.activity_main);
+        screenListener = new ScreenListener(this);
+        screenListener.start(this);
         wakeLocker = new WakeLocker(this, WakeLocker.Type.KEEP_CPU_RUN);
+        wakeLocker.acquire();
         accelerometerHelper = new SensorHelper(this, Sensor.TYPE_ACCELEROMETER);
         orientationHelper = new SensorHelper(this, Sensor.TYPE_ORIENTATION);
         accelerometerX = (TextView) findViewById(R.id.main_txtAccelerometerX);
@@ -48,6 +52,44 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
         orientationB = (TextView) findViewById(R.id.main_txtOrientationB);
         orientationC = (TextView) findViewById(R.id.main_txtOrientationC);
         executorService = Executors.newCachedThreadPool();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wakeLocker.release();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (RepeatHelper.isFastDoubleAction(2000L)) {
+            // 几毫秒之内连续按两次
+            finish();
+            System.exit(0);
+        } else {
+            Toast.makeText(getApplicationContext(), "再按一次退出软件", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onScreenOn() {
+        System.out.println("屏幕已点亮");
+    }
+
+    @Override
+    public void onScreenOff() {
+        //在手机锁屏的时候，重新注册传感器可解决部分手机无法黑屏后收集数据的问题，
+        //参考：http://bbs.csdn.net/topics/390410025
+        System.out.println("屏幕已熄灭");
+        accelerometerHelper.unregisterListener();
+        accelerometerHelper.registerListener(this);
+        orientationHelper.unregisterListener();
+        orientationHelper.registerListener(this);
+    }
+
+    @Override
+    public void onUserPresent() {
+        System.out.println("屏幕已解锁");
     }
 
     @Override
@@ -61,6 +103,7 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
         float x = values[0];
         float y = values[1];
         float z = values[2];
+        System.out.println(String.format("x=%f,y=%f,z=%f", x, y, z));
         if (sensorType == Sensor.TYPE_ACCELEROMETER) {
             showAccelerometerDataToView(x, y, z);
         } else if (sensorType == Sensor.TYPE_ORIENTATION) {
@@ -135,29 +178,6 @@ public class MainActivity extends Activity implements SensorHelper.OnSensorChang
             }
         };
         executorService.submit(thread);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        wakeLocker.acquire();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        wakeLocker.release();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (RepeatHelper.isFastDoubleAction(2000L)) {
-            // 几毫秒之内连续按两次
-            finish();
-            System.exit(0);
-        } else {
-            Toast.makeText(getApplicationContext(), "再按一次退出软件", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void exportExcel(View view) {

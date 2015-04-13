@@ -1,0 +1,107 @@
+package com.gztoucher.sensortest.helper;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.PowerManager;
+
+/**
+ * ÆÁÄ»×´Ì¬¼àÌý¡£²Î¼û£ºhttp://blog.csdn.net/mengweiqi33/article/details/18094221
+ *
+ * @author ÀîÓñ½­[QQ:1023694760]
+ * @version 2015/4/13
+ *          Created by IntelliJ IDEA 14.1
+ */
+public class ScreenListener {
+    private Context mContext;
+    private ScreenBroadcastReceiver mScreenReceiver;
+    private ScreenStateListener mScreenStateListener;
+
+    public ScreenListener(Context context) {
+        mContext = context;
+        mScreenReceiver = new ScreenBroadcastReceiver();
+    }
+
+    /**
+     * ¿ªÊ¼¼àÌýÆÁÄ»×´Ì¬
+     *
+     * @param listener
+     */
+    public void start(ScreenStateListener listener) {
+        mScreenStateListener = listener;
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        mContext.registerReceiver(mScreenReceiver, filter);
+        initScreenState();
+    }
+
+    /**
+     * ³õÊ¼»¯ÆÁÄ»×´Ì¬
+     */
+    private void initScreenState() {
+        if (mScreenStateListener == null) {
+            throw new IllegalArgumentException("listener is null");
+        }
+        PowerManager manager = (PowerManager) mContext
+                .getSystemService(Context.POWER_SERVICE);
+        if (manager.isScreenOn()) {
+            mScreenStateListener.onScreenOn();
+        } else {
+            mScreenStateListener.onScreenOff();
+        }
+    }
+
+    /**
+     * Í£Ö¹screen×´Ì¬¼àÌý
+     */
+    public void stop() {
+        mContext.unregisterReceiver(mScreenReceiver);
+    }
+
+    /**
+     * ÆÁÄ»×´Ì¬¹ã²¥½ÓÊÕÕß
+     */
+    private class ScreenBroadcastReceiver extends BroadcastReceiver {
+        private String action = null;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            action = intent.getAction();
+            if (Intent.ACTION_SCREEN_ON.equals(action)) { // ¿ªÆÁ
+                mScreenStateListener.onScreenOn();
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) { // ËøÆÁ
+                mScreenStateListener.onScreenOff();
+            } else if (Intent.ACTION_USER_PRESENT.equals(action)) { // ½âËø
+                mScreenStateListener.onUserPresent();
+            }
+        }
+
+    }
+
+    /**
+     * »Øµ÷½Ó¿Ú
+     */
+    public interface ScreenStateListener {
+
+        /**
+         * ÆÁÄ»ÒÑµãÁÁ
+         */
+        void onScreenOn();
+
+        /**
+         * ÆÁÄ»ÒÑÏ¨Ãð
+         */
+        void onScreenOff();
+
+        /**
+         * ÆÁÄ»ÒÑ½âËø
+         */
+        void onUserPresent();
+
+    }
+
+}
+
